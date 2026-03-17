@@ -1,11 +1,12 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, User, BarChart3, BookOpen, Upload } from "lucide-react";
+import { LayoutDashboard, User, BarChart3, BookOpen, Upload, Library } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/practice", label: "Practice", icon: BookOpen },
   { to: "/upload", label: "Upload", icon: Upload },
+  { to: "/materials", label: "Materials", icon: Library },
+  { to: "/practice", label: "Practice", icon: BookOpen },
   { to: "/progress", label: "Progress", icon: BarChart3 },
   { to: "/profile", label: "Profile", icon: User },
 ];

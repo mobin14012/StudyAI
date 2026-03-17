@@ -10,6 +10,7 @@ import { errorHandler } from "./middleware/error-handler";
 import { notFoundHandler } from "./middleware/not-found";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
+import materialRoutes from "./routes/material.routes";
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.get("/api/health", (_req, res) => {
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/materials", materialRoutes);
 
 // 404 handler
 app.use(notFoundHandler);

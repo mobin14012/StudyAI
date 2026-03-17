@@ -8,6 +8,9 @@ import { RegisterPage } from "@/pages/RegisterPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { ProfilePage } from "@/pages/ProfilePage";
 import { ProgressPage } from "@/pages/ProgressPage";
+import { UploadPage } from "@/pages/UploadPage";
+import { MaterialsPage } from "@/pages/MaterialsPage";
+import { MaterialDetailPage } from "@/pages/MaterialDetailPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,21 +21,12 @@ const queryClient = new QueryClient({
   },
 });
 
-// Placeholder pages for Phase 2+ features
+// Placeholder pages for Phase 3+ features
 function PracticePlaceholder() {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Practice</h2>
       <p className="text-muted-foreground">Upload study materials to start practicing.</p>
-    </div>
-  );
-}
-
-function UploadPlaceholder() {
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Upload Materials</h2>
-      <p className="text-muted-foreground">Upload feature coming in Phase 2.</p>
     </div>
   );
 }
@@ -51,7 +45,9 @@ function App() {
             <Route element={<AppLayout />}>
               <Route path="/" element={<DashboardPage />} />
               <Route path="/practice" element={<PracticePlaceholder />} />
-              <Route path="/upload" element={<UploadPlaceholder />} />
+              <Route path="/upload" element={<UploadPage />} />
+              <Route path="/materials" element={<MaterialsPage />} />
+              <Route path="/materials/:id" element={<MaterialDetailPage />} />
               <Route path="/progress" element={<ProgressPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Route>
