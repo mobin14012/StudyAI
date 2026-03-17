@@ -164,13 +164,82 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated during roadmap creation) | | |
+| AUTH-01 | Phase 1: Foundation & Auth | ○ Pending |
+| AUTH-02 | Phase 1: Foundation & Auth | ○ Pending |
+| AUTH-03 | Phase 1: Foundation & Auth | ○ Pending |
+| AUTH-04 | Phase 1: Foundation & Auth | ○ Pending |
+| AUTH-05 | Phase 1: Foundation & Auth | ○ Pending |
+| AUTH-06 | Phase 1: Foundation & Auth | ○ Pending |
+| PROF-01 | Phase 1: Foundation & Auth | ○ Pending |
+| PROF-02 | Phase 1: Foundation & Auth | ○ Pending |
+| PROF-03 | Phase 1: Foundation & Auth | ○ Pending |
+| PROF-04 | Phase 6: AI Tutor & Extras | ○ Pending |
+| PROF-05 | Phase 6: AI Tutor & Extras | ○ Pending |
+| PROF-06 | Phase 6: AI Tutor & Extras | ○ Pending |
+| MATL-01 | Phase 2: Upload Pipeline | ○ Pending |
+| MATL-02 | Phase 2: Upload Pipeline | ○ Pending |
+| MATL-03 | Phase 2: Upload Pipeline | ○ Pending |
+| MATL-04 | Phase 2: Upload Pipeline | ○ Pending |
+| MATL-05 | Phase 2: Upload Pipeline | ○ Pending |
+| MATL-06 | Phase 2: Upload Pipeline | ○ Pending |
+| MATL-07 | Phase 2: Upload Pipeline | ○ Pending |
+| MATL-08 | Phase 2: Upload Pipeline | ○ Pending |
+| QGEN-01 | Phase 3: Question Generation | ○ Pending |
+| QGEN-02 | Phase 3: Question Generation | ○ Pending |
+| QGEN-03 | Phase 3: Question Generation | ○ Pending |
+| QGEN-04 | Phase 3: Question Generation | ○ Pending |
+| QGEN-05 | Phase 3: Question Generation | ○ Pending |
+| QGEN-06 | Phase 3: Question Generation | ○ Pending |
+| QGEN-07 | Phase 3: Question Generation | ○ Pending |
+| QGEN-08 | Phase 3: Question Generation | ○ Pending |
+| PRAC-01 | Phase 4: Practice Engine | ○ Pending |
+| PRAC-02 | Phase 4: Practice Engine | ○ Pending |
+| PRAC-03 | Phase 4: Practice Engine | ○ Pending |
+| PRAC-04 | Phase 4: Practice Engine | ○ Pending |
+| PRAC-05 | Phase 4: Practice Engine | ○ Pending |
+| PRAC-06 | Phase 4: Practice Engine | ○ Pending |
+| PRAC-07 | Phase 4: Practice Engine | ○ Pending |
+| PRAC-08 | Phase 4: Practice Engine | ○ Pending |
+| ADPT-01 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| ADPT-02 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| ADPT-03 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| ADPT-04 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| ADPT-05 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| ADPT-06 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| ANLT-01 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| ANLT-02 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| ANLT-03 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| ANLT-04 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| ANLT-05 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| ANLT-06 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| ANLT-07 | Phase 5: Adaptive Learning & Analytics | ○ Pending |
+| TUTR-01 | Phase 6: AI Tutor & Extras | ○ Pending |
+| TUTR-02 | Phase 6: AI Tutor & Extras | ○ Pending |
+| TUTR-03 | Phase 6: AI Tutor & Extras | ○ Pending |
+| TUTR-04 | Phase 6: AI Tutor & Extras | ○ Pending |
+| UIUX-01 | Phase 1: Foundation & Auth | ○ Pending |
+| UIUX-02 | Phase 1: Foundation & Auth | ○ Pending |
+| UIUX-03 | Phase 1: Foundation & Auth | ○ Pending |
+| UIUX-04 | Phase 1: Foundation & Auth | ○ Pending |
+| UIUX-05 | Phase 7: Polish & Deploy | ○ Pending |
+| UIUX-06 | Phase 1: Foundation & Auth | ○ Pending |
+| XTRA-01 | Phase 6: AI Tutor & Extras | ○ Pending |
+| XTRA-02 | Phase 6: AI Tutor & Extras | ○ Pending |
+| XTRA-03 | Phase 6: AI Tutor & Extras | ○ Pending |
+| XTRA-04 | Phase 6: AI Tutor & Extras | ○ Pending |
+| XTRA-05 | Phase 6: AI Tutor & Extras | ○ Pending |
+| SECR-01 | Phase 1: Foundation & Auth | ○ Pending |
+| SECR-02 | Phase 1: Foundation & Auth | ○ Pending |
+| SECR-03 | Phase 1: Foundation & Auth | ○ Pending |
+| SECR-04 | Phase 1: Foundation & Auth | ○ Pending |
+| SECR-05 | Phase 1: Foundation & Auth | ○ Pending |
+| SECR-06 | Phase 6: AI Tutor & Extras | ○ Pending |
 
 **Coverage:**
-- v1 requirements: 54 total
-- Mapped to phases: 0
-- Unmapped: 54
+- v1 requirements: 70 total
+- Mapped to phases: 70
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-17*
-*Last updated: 2026-03-17 after initial definition*
+*Last updated: 2026-03-17 after roadmap creation*
