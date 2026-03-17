@@ -2,6 +2,12 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { LoginPage } from "@/pages/LoginPage";
+import { RegisterPage } from "@/pages/RegisterPage";
+import { DashboardPage } from "@/pages/DashboardPage";
+import { ProfilePage } from "@/pages/ProfilePage";
+import { ProgressPage } from "@/pages/ProgressPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -12,56 +18,7 @@ const queryClient = new QueryClient({
   },
 });
 
-// Placeholder pages — will be replaced in Plan 04
-function DashboardPage() {
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
-      <p className="text-muted-foreground">Welcome to StudyAI. Upload materials to get started.</p>
-    </div>
-  );
-}
-
-function LoginPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md space-y-6">
-        <h1 className="text-2xl font-bold text-center">Sign In</h1>
-        <p className="text-muted-foreground text-center">Login form will be implemented in Plan 04</p>
-      </div>
-    </div>
-  );
-}
-
-function RegisterPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md space-y-6">
-        <h1 className="text-2xl font-bold text-center">Create Account</h1>
-        <p className="text-muted-foreground text-center">Register form will be implemented in Plan 04</p>
-      </div>
-    </div>
-  );
-}
-
-function ProfilePage() {
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Profile Settings</h2>
-      <p className="text-muted-foreground">Profile settings will be implemented in Plan 04</p>
-    </div>
-  );
-}
-
-function ProgressPage() {
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Your Progress</h2>
-      <p className="text-muted-foreground">Start practicing to see your progress here!</p>
-    </div>
-  );
-}
-
+// Placeholder pages for Phase 2+ features
 function PracticePlaceholder() {
   return (
     <div className="p-6">
@@ -89,13 +46,15 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* App layout routes (will be protected in Plan 04) */}
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/practice" element={<PracticePlaceholder />} />
-            <Route path="/upload" element={<UploadPlaceholder />} />
-            <Route path="/progress" element={<ProgressPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+          {/* Protected app routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/practice" element={<PracticePlaceholder />} />
+              <Route path="/upload" element={<UploadPlaceholder />} />
+              <Route path="/progress" element={<ProgressPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+            </Route>
           </Route>
 
           {/* Catch-all */}
