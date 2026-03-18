@@ -1,3 +1,4 @@
+import { Card, CardContent } from "@/components/ui/card";
 import type { PracticeQuestion } from "@/types";
 import { McqOptions } from "./McqOptions";
 import { TrueFalseButtons } from "./TrueFalseButtons";
@@ -19,49 +20,51 @@ export function QuestionDisplay({
   isSubmitting,
 }: QuestionDisplayProps) {
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      {/* Progress */}
-      <div className="mb-4">
-        <div className="flex justify-between text-sm text-gray-600 mb-1">
-          <span>
-            Question {currentIndex + 1} of {totalQuestions}
+    <Card className="max-w-2xl mx-auto">
+      <CardContent className="pt-6">
+        {/* Progress */}
+        <div className="mb-4">
+          <div className="flex justify-between text-sm text-muted-foreground mb-1">
+            <span>
+              Question {currentIndex + 1} of {totalQuestions}
+            </span>
+            <span className="capitalize">{question.difficulty}</span>
+          </div>
+          <div className="w-full bg-muted rounded-full h-2">
+            <div
+              className="bg-primary h-2 rounded-full transition-all"
+              style={{ width: `${((currentIndex + 1) / totalQuestions) * 100}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Topic Badge */}
+        <div className="mb-4">
+          <span className="inline-block px-3 py-1 bg-muted text-muted-foreground text-sm rounded-full">
+            {question.topic}
           </span>
-          <span className="capitalize">{question.difficulty}</span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div
-            className="bg-blue-600 h-2 rounded-full transition-all"
-            style={{ width: `${((currentIndex + 1) / totalQuestions) * 100}%` }}
+
+        {/* Question Text */}
+        <h3 className="text-xl font-medium mb-6 text-foreground">{question.text}</h3>
+
+        {/* Answer Input based on question type */}
+        {question.type === "mcq" && question.options && (
+          <McqOptions
+            options={question.options}
+            onSelect={onSubmit}
+            isSubmitting={isSubmitting}
           />
-        </div>
-      </div>
+        )}
 
-      {/* Topic Badge */}
-      <div className="mb-4">
-        <span className="inline-block px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">
-          {question.topic}
-        </span>
-      </div>
+        {question.type === "true_false" && (
+          <TrueFalseButtons onSelect={onSubmit} isSubmitting={isSubmitting} />
+        )}
 
-      {/* Question Text */}
-      <h3 className="text-xl font-medium mb-6">{question.text}</h3>
-
-      {/* Answer Input based on question type */}
-      {question.type === "mcq" && question.options && (
-        <McqOptions
-          options={question.options}
-          onSelect={onSubmit}
-          isSubmitting={isSubmitting}
-        />
-      )}
-
-      {question.type === "true_false" && (
-        <TrueFalseButtons onSelect={onSubmit} isSubmitting={isSubmitting} />
-      )}
-
-      {question.type === "short_answer" && (
-        <ShortAnswerInput onSubmit={onSubmit} isSubmitting={isSubmitting} />
-      )}
-    </div>
+        {question.type === "short_answer" && (
+          <ShortAnswerInput onSubmit={onSubmit} isSubmitting={isSubmitting} />
+        )}
+      </CardContent>
+    </Card>
   );
 }
