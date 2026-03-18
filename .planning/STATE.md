@@ -1,14 +1,14 @@
 # Project State: StudyAI
 
 ## Status
-- **Current phase:** Phase 6 — AI Tutor & Extras (In Progress)
-- **Current plan:** 06-01 complete, ready for 06-02
-- **Overall progress:** 78%
+- **Current phase:** Phase 6 — AI Tutor & Extras (COMPLETE)
+- **Next phase:** Phase 7 — Polish & Deploy
+- **Overall progress:** 85%
 
 ## Project Reference
 See: .planning/PROJECT.md (updated 2026-03-17)
 **Core value:** Students improve their weak areas through AI-driven adaptive practice
-**Current focus:** Phase 6 plan 01 complete — Backend AI Tutor + Rate Limiting
+**Current focus:** Phase 6 complete — All tutor, extras, and frontend UI
 
 ## Phase Progress
 
@@ -19,7 +19,7 @@ See: .planning/PROJECT.md (updated 2026-03-17)
 | 3 | Question Generation | ● Complete | 3/3 executed |
 | 4 | Practice Engine | ● Complete | 2/2 executed |
 | 5 | Adaptive Learning & Analytics | ● Complete | 2/2 executed |
-| 6 | AI Tutor & Extras | ◐ In Progress | 1/? executed |
+| 6 | AI Tutor & Extras | ● Complete | 3/3 executed |
 | 7 | Polish & Deploy | ○ Pending | 0/0 |
 
 ## Phase 6 — Plan Status
@@ -27,6 +27,16 @@ See: .planning/PROJECT.md (updated 2026-03-17)
 | Plan | Wave | Title | Status |
 |------|------|-------|--------|
 | 06-01 | 1 | Backend AI Tutor + Rate Limiting | ● Complete |
+| 06-02 | 1 | Backend Extras APIs | ● Complete |
+| 06-03 | 2 | Frontend Tutor + Extras UI | ● Complete |
+
+## Phase 6 — Verification
+
+- **Requirements:** 19/19 addressed (TUTR-01-04, XTRA-01-05, PROF-04-06, RATE-01-02, plus 3 from earlier plans)
+- **Server build:** `tsc` succeeds (0 errors)
+- **Client build:** `vite build` succeeds (2622 modules, 0 errors)
+- **New files created:** 20 (9 server, 11 client)
+- **Files modified:** 8 (4 server, 4 client)
 
 ## Phase 5 — Plan Status
 
@@ -34,78 +44,6 @@ See: .planning/PROJECT.md (updated 2026-03-17)
 |------|------|-------|--------|
 | 05-01 | 1 | Backend Analytics Service | ● Complete |
 | 05-02 | 2 | Frontend Analytics Dashboard | ● Complete |
-
-## Phase 5 — Verification
-
-- **Requirements:** 13/13 addressed (ADPT-01 through ADPT-06, ANLT-01 through ANLT-07)
-- **Server build:** `tsc` succeeds (0 errors)
-- **Client build:** `vite build` succeeds (2611 modules, 0 errors)
-- **New files created:** 10 (2 server, 8 client)
-- **Files modified:** 4 (2 server, 2 client)
-- **Dependencies added:** recharts (charting library)
-
-## Phase 4 — Plan Status
-
-| Plan | Wave | Title | Status |
-|------|------|-------|--------|
-| 04-01 | 1 | Backend Practice Engine | ● Complete |
-| 04-02 | 2 | Frontend Practice UI | ● Complete |
-
-## Phase 4 — Verification
-
-- **Requirements:** 8/8 addressed (PRAC-01 through PRAC-08)
-- **Server build:** `tsc` succeeds (0 errors)
-- **Client build:** `vite build` succeeds (2054 modules, 0 errors)
-- **New files created:** 17 (6 server, 11 client)
-- **Files modified:** 4 (2 server, 2 client)
-
-## Phase 3 — Plan Status
-
-| Plan | Wave | Title | Status |
-|------|------|-------|--------|
-| 03-01 | 1 | Backend Question Model + AI Generator | ● Complete |
-| 03-02 | 1 | Backend API + Integration | ● Complete |
-| 03-03 | 2 | Frontend Generation UI | ● Complete |
-
-## Phase 3 — Verification
-
-- **Requirements:** 8/8 addressed (QGEN-01 through QGEN-08)
-- **Server build:** `tsc` succeeds (0 errors)
-- **Client build:** `vite build` succeeds (2043 modules, 0 errors)
-- **New files created:** 15 (6 server, 9 client)
-- **Files modified:** 5 (2 server, 3 client)
-
-## Phase 2 — Plan Status
-
-| Plan | Wave | Title | Status |
-|------|------|-------|--------|
-| 02-01 | 1 | Backend Upload + PDF Extraction + AI Services | ● Complete |
-| 02-02 | 1 | Frontend Upload UI + Materials Pages | ● Complete |
-| 02-03 | 2 | Integration + Polish | ● Complete |
-
-## Phase 2 — Verification
-
-- **Requirements:** 8/8 addressed (MATL-01 through MATL-08)
-- **Server build:** `tsc --noEmit` succeeds
-- **Client build:** `vite build` succeeds (2033 modules, 0 errors)
-- **Security:** No OPENAI strings in client bundle (SECR-04)
-- **Commit:** `931d3b6` (Plans 02-01 + 02-02)
-
-## Phase 1 — Plan Status
-
-| Plan | Wave | Title | Status |
-|------|------|-------|--------|
-| 01-01 | 1 | Project Scaffolding | ● Complete |
-| 01-02 | 2 | Auth Backend | ● Complete |
-| 01-03 | 2 | UI Shell & Theme | ● Complete |
-| 01-04 | 3 | Auth Frontend + Profile | ● Complete |
-
-## Phase 1 — Verification
-
-- **Requirements:** 21/21 addressed (20 PASS, 1 PARTIAL)
-- **Partial:** PageSkeleton component exists but unused — LoadingSpinner used for auth loading state instead. Will be wired when data-fetching pages are built in later phases.
-- **Build:** `vite build` succeeds (1939 modules, 0 errors)
-- **Commits:** `1b7117e` (Plans 01-01/02/03), `5808a03` (Plan 01-04)
 
 ## Accumulated Decisions
 
@@ -139,39 +77,20 @@ See: .planning/PROJECT.md (updated 2026-03-17)
 - Per-user AI rate limiting: 30 requests/minute keyed by userId
 - Tutor conversation history capped at 10 messages
 - Material context truncated to 8000 chars for tutor
+- Pomodoro timer settings persist to localStorage
+- Tutor chat history managed in component state (resets on page refresh)
 
 ## Recent Activity
 
-- 2026-03-17: Phase 1 research completed (01-RESEARCH.md)
-- 2026-03-17: Phase 1 plans created (4 plans, 3 waves)
-- 2026-03-17: Plan checker approved (PASS_WITH_FLAGS, no blockers)
-- 2026-03-17: VALIDATION.md created
-- 2026-03-17: Plans 01-01, 01-02, 01-03 executed and committed (`1b7117e`)
-- 2026-03-17: Plan 01-04 executed and committed (`5808a03`)
-- 2026-03-17: Phase 1 verified — 20/21 PASS, 1 PARTIAL
-- 2026-03-17: Phase 1 summaries written (01-03-SUMMARY.md, 01-04-SUMMARY.md)
-- 2026-03-17: **Phase 1 COMPLETE**
-- 2026-03-17: Phase 2 research completed (02-RESEARCH.md)
-- 2026-03-17: Phase 2 plans created (3 plans, 2 waves)
-- 2026-03-17: Phase 2 Plans 02-01 + 02-02 executed and committed (`931d3b6`)
-- 2026-03-18: Phase 2 verified — 8/8 requirements PASS
-- 2026-03-18: **Phase 2 COMPLETE**
-- 2026-03-18: Phase 3 research completed (RESEARCH.md)
-- 2026-03-18: Phase 3 plans created (3 plans, 2 waves)
-- 2026-03-18: Phase 3 Plans 03-01, 03-02, 03-03 executed
-- 2026-03-18: Phase 3 verified — 8/8 requirements PASS
-- 2026-03-18: **Phase 3 COMPLETE**
-- 2026-03-18: Phase 4 research completed (RESEARCH.md)
-- 2026-03-18: Phase 4 plans created (2 plans, 2 waves)
-- 2026-03-18: Phase 4 Plans 04-01, 04-02 executed
-- 2026-03-18: Phase 4 verified — 8/8 requirements PASS
-- 2026-03-18: **Phase 4 COMPLETE**
-- 2026-03-18: Phase 5 research completed (RESEARCH.md)
-- 2026-03-18: Phase 5 plans created (2 plans, 2 waves)
-- 2026-03-18: Phase 5 Plans 05-01, 05-02 executed
-- 2026-03-18: Phase 5 verified — 13/13 requirements PASS
-- 2026-03-18: **Phase 5 COMPLETE**
+- 2026-03-17: Phase 1 complete (4 plans)
+- 2026-03-18: Phase 2 complete (3 plans)
+- 2026-03-18: Phase 3 complete (3 plans)
+- 2026-03-18: Phase 4 complete (2 plans)
+- 2026-03-18: Phase 5 complete (2 plans)
 - 2026-03-18: Phase 6 Plan 06-01 executed (Backend AI Tutor + Rate Limiting)
+- 2026-03-18: Phase 6 Plan 06-02 executed (Backend Extras APIs)
+- 2026-03-18: Phase 6 Plan 06-03 executed (Frontend Tutor + Extras UI)
+- 2026-03-18: **Phase 6 COMPLETE**
 
 ---
-*Last updated: 2026-03-18 after Plan 06-01 completion*
+*Last updated: 2026-03-18 after Phase 6 completion*
