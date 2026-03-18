@@ -11,6 +11,10 @@ import { notFoundHandler } from "./middleware/not-found";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import materialRoutes from "./routes/material.routes";
+import questionRoutes from "./routes/question.routes";
+import practiceRoutes from "./routes/practice.routes";
+import analyticsRoutes from "./routes/analytics.routes";
+import tutorRoutes from "./routes/tutor.routes";
 
 const app = express();
 
@@ -37,6 +41,10 @@ app.get("/api/health", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/materials", materialRoutes);
+app.use("/api/questions", questionRoutes);
+app.use("/api/practice", practiceRoutes);
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/tutor", tutorRoutes);
 
 // 404 handler
 app.use(notFoundHandler);

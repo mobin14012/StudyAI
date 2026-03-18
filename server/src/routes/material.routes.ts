@@ -2,7 +2,7 @@ import { Router, Response, NextFunction } from "express";
 import { authenticate } from "../middleware/authenticate";
 import { uploadSingle, handleMulterError } from "../middleware/upload";
 import { validate } from "../middleware/validate";
-import { aiLimiter } from "../middleware/rate-limit";
+import { aiLimiter } from "../middleware/ai-rate-limit";
 import {
   updateTopicsSchema,
   materialListQuerySchema,
