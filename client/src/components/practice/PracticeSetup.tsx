@@ -1,5 +1,15 @@
 import { useState } from "react";
 import { useMaterials } from "@/hooks/use-materials";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { StartPracticeRequest } from "@/types";
 
 interface PracticeSetupProps {
@@ -30,85 +40,86 @@ export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
     mode === "weak_topic" || (mode === "general" && materialId);
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Start Practice Session</h2>
-
-      {/* Mode Selection */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Practice Mode
-        </label>
-        <div className="flex gap-4">
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="mode"
-              value="general"
-              checked={mode === "general"}
-              onChange={() => setMode("general")}
-              className="mr-2"
-            />
-            General Practice
-          </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="mode"
-              value="weak_topic"
-              checked={mode === "weak_topic"}
-              onChange={() => setMode("weak_topic")}
-              className="mr-2"
-            />
-            Weak Topics Drill
-          </label>
+    <Card className="max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle className="text-xl md:text-2xl">Start Practice Session</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Mode Selection */}
+        <div className="space-y-3">
+          <Label className="text-sm font-medium">Practice Mode</Label>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              type="button"
+              variant={mode === "general" ? "default" : "outline"}
+              className="flex-1 min-h-11"
+              onClick={() => setMode("general")}
+            >
+              General Practice
+            </Button>
+            <Button
+              type="button"
+              variant={mode === "weak_topic" ? "default" : "outline"}
+              className="flex-1 min-h-11"
+              onClick={() => setMode("weak_topic")}
+            >
+              Weak Topics Drill
+            </Button>
+          </div>
         </div>
-      </div>
 
-      {/* Material Selection (for general mode) */}
-      {mode === "general" && (
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Select Material
-          </label>
-          <select
-            value={materialId}
-            onChange={(e) => setMaterialId(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            disabled={materialsLoading}
-          >
-            <option value="">Select a material...</option>
-            {materials?.data.map((material) => (
-              <option key={material.id} value={material.id}>
-                {material.filename}
-              </option>
-            ))}
-          </select>
+        {/* Material Selection (for general mode) */}
+        {mode === "general" && (
+          <div className="space-y-2">
+            <Label htmlFor="material">Select Material</Label>
+            <Select
+              value={materialId}
+              onValueChange={setMaterialId}
+              disabled={materialsLoading}
+            >
+              <SelectTrigger id="material" className="w-full min-h-11">
+                <SelectValue placeholder="Select a material..." />
+              </SelectTrigger>
+              <SelectContent>
+                {materials?.data.map((material) => (
+                  <SelectItem key={material.id} value={material.id}>
+                    <span className="truncate">{material.filename}</span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        {/* Question Count */}
+        <div className="space-y-3">
+          <Label htmlFor="questionCount">Number of Questions: {questionCount}</Label>
+          <input
+            id="questionCount"
+            type="range"
+            min={5}
+            max={20}
+            step={1}
+            value={questionCount}
+            onChange={(e) => setQuestionCount(Number(e.target.value))}
+            className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+          />
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>5</span>
+            <span>20</span>
+          </div>
         </div>
-      )}
 
-      {/* Question Count */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Number of Questions: {questionCount}
-        </label>
-        <input
-          type="range"
-          min="5"
-          max="20"
-          value={questionCount}
-          onChange={(e) => setQuestionCount(Number(e.target.value))}
-          className="w-full"
-        />
-      </div>
-
-      {/* Start Button */}
-      <button
-        onClick={handleStart}
-        disabled={!canStart || isLoading}
-        className="w-full py-3 px-4 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-      >
-        {isLoading ? "Starting..." : "Start Practice"}
-      </button>
-    </div>
+        {/* Start Button */}
+        <Button
+          onClick={handleStart}
+          disabled={!canStart || isLoading}
+          className="w-full min-h-12"
+          size="lg"
+        >
+          {isLoading ? "Starting..." : "Start Practice"}
+        </Button>
+      </CardContent>
+    </Card>
   );
 }

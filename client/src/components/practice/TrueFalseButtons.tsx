@@ -1,3 +1,6 @@
+import { Button } from "@/components/ui/button";
+import { Check, X } from "lucide-react";
+
 interface TrueFalseButtonsProps {
   onSelect: (answer: string) => void;
   isSubmitting: boolean;
@@ -5,21 +8,25 @@ interface TrueFalseButtonsProps {
 
 export function TrueFalseButtons({ onSelect, isSubmitting }: TrueFalseButtonsProps) {
   return (
-    <div className="flex gap-4">
-      <button
+    <div className="flex flex-col sm:flex-row gap-3">
+      <Button
+        variant="outline"
         onClick={() => onSelect("true")}
         disabled={isSubmitting}
-        className="flex-1 p-4 border-2 border-green-500 text-green-700 rounded-lg hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors"
+        className="flex-1 min-h-12 gap-2 border-2 border-green-500/50 text-green-600 hover:bg-green-500/10 hover:border-green-500 dark:text-green-400"
       >
+        <Check className="h-5 w-5" />
         True
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="outline"
         onClick={() => onSelect("false")}
         disabled={isSubmitting}
-        className="flex-1 p-4 border-2 border-red-500 text-red-700 rounded-lg hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors"
+        className="flex-1 min-h-12 gap-2 border-2 border-red-500/50 text-red-600 hover:bg-red-500/10 hover:border-red-500 dark:text-red-400"
       >
+        <X className="h-5 w-5" />
         False
-      </button>
+      </Button>
     </div>
   );
 }

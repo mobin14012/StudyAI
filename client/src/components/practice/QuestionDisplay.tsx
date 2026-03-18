@@ -1,4 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import type { PracticeQuestion } from "@/types";
 import { McqOptions } from "./McqOptions";
 import { TrueFalseButtons } from "./TrueFalseButtons";
@@ -19,34 +21,33 @@ export function QuestionDisplay({
   onSubmit,
   isSubmitting,
 }: QuestionDisplayProps) {
+  const progressPercent = ((currentIndex + 1) / totalQuestions) * 100;
+
   return (
     <Card className="max-w-2xl mx-auto">
-      <CardContent className="pt-6">
+      <CardContent className="p-4 md:p-6 space-y-4">
         {/* Progress */}
-        <div className="mb-4">
-          <div className="flex justify-between text-sm text-muted-foreground mb-1">
+        <div className="space-y-2">
+          <div className="flex justify-between text-sm text-muted-foreground">
             <span>
               Question {currentIndex + 1} of {totalQuestions}
             </span>
-            <span className="capitalize">{question.difficulty}</span>
+            <Badge variant="outline" className="capitalize">
+              {question.difficulty}
+            </Badge>
           </div>
-          <div className="w-full bg-muted rounded-full h-2">
-            <div
-              className="bg-primary h-2 rounded-full transition-all"
-              style={{ width: `${((currentIndex + 1) / totalQuestions) * 100}%` }}
-            />
-          </div>
+          <Progress value={progressPercent} className="h-2" />
         </div>
 
         {/* Topic Badge */}
-        <div className="mb-4">
-          <span className="inline-block px-3 py-1 bg-muted text-muted-foreground text-sm rounded-full">
-            {question.topic}
-          </span>
+        <div>
+          <Badge variant="secondary">{question.topic}</Badge>
         </div>
 
         {/* Question Text */}
-        <h3 className="text-xl font-medium mb-6 text-foreground">{question.text}</h3>
+        <h3 className="text-lg md:text-xl font-medium leading-relaxed text-foreground">
+          {question.text}
+        </h3>
 
         {/* Answer Input based on question type */}
         {question.type === "mcq" && question.options && (
