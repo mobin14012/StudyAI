@@ -35,17 +35,17 @@ export function OverviewCards({ stats }: OverviewCardsProps) {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
       {cards.map((card) => (
         <Card key={card.title}>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardHeader className="flex flex-row items-center justify-between p-3 md:p-4 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium text-muted-foreground">
               {card.title}
             </CardTitle>
             <card.icon className={`h-4 w-4 ${card.color}`} />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{card.value}</div>
+          <CardContent className="p-3 md:p-4 pt-0">
+            <div className="text-xl md:text-2xl font-bold">{card.value}</div>
           </CardContent>
         </Card>
       ))}

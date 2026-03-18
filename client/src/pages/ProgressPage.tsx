@@ -11,7 +11,7 @@ export function ProgressPage() {
 
   if (isLoading) {
     return (
-      <div className="p-6 flex items-center justify-center min-h-[400px]">
+      <div className="p-4 md:p-6 flex items-center justify-center min-h-[400px]">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
@@ -19,7 +19,7 @@ export function ProgressPage() {
 
   if (error) {
     return (
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         <Card>
           <CardContent className="py-8 text-center">
             <p className="text-red-500">Failed to load analytics. Please try again.</p>
@@ -32,8 +32,8 @@ export function ProgressPage() {
   // No data state
   if (!dashboard || dashboard.overview.totalAttempts === 0) {
     return (
-      <div className="p-6 max-w-4xl">
-        <h2 className="text-2xl font-bold mb-6">Your Progress</h2>
+      <div className="p-4 md:p-6 max-w-4xl">
+        <h2 className="text-xl md:text-2xl font-bold mb-6">Your Progress</h2>
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-16 text-center">
             <BarChart3 className="h-12 w-12 text-muted-foreground mb-4" />
@@ -50,10 +50,10 @@ export function ProgressPage() {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Your Progress</h2>
-        <p className="text-sm text-muted-foreground">
+    <div className="p-4 md:p-6 space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <h2 className="text-xl md:text-2xl font-bold">Your Progress</h2>
+        <p className="text-xs sm:text-sm text-muted-foreground">
           Last updated: {new Date(dashboard.lastUpdated).toLocaleString()}
         </p>
       </div>

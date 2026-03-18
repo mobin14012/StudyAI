@@ -19,13 +19,13 @@ export function WeakTopicsList({ topics }: WeakTopicsListProps) {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5 text-yellow-500" />
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3">
+        <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+          <AlertTriangle className="h-5 w-5 text-yellow-500 shrink-0" />
           Weak Topics
         </CardTitle>
         {topics.length > 0 && (
-          <Button onClick={handleDrill} size="sm">
+          <Button onClick={handleDrill} size="sm" className="w-full sm:w-auto min-h-10">
             Drill Weak Topics
           </Button>
         )}
@@ -46,22 +46,22 @@ export function WeakTopicsList({ topics }: WeakTopicsListProps) {
             {topics.map((topic) => (
               <div
                 key={topic.topic}
-                className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-muted/50 rounded-lg gap-2"
               >
-                <div>
-                  <p className="font-medium">{topic.topic}</p>
+                <div className="min-w-0">
+                  <p className="font-medium truncate">{topic.topic}</p>
                   <p className="text-sm text-muted-foreground">
                     {topic.total} attempts
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-right">
+                <div className="flex items-center justify-between sm:justify-end gap-3">
+                  <div className="text-left sm:text-right">
                     <p className="font-medium text-red-500">{topic.accuracy}%</p>
                     <p className="text-xs text-muted-foreground">
                       Recent: {topic.recentAccuracy}%
                     </p>
                   </div>
-                  <Badge variant="destructive">Weak</Badge>
+                  <Badge variant="destructive" className="shrink-0">Weak</Badge>
                 </div>
               </div>
             ))}
