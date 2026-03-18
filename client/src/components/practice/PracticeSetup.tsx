@@ -74,7 +74,7 @@ export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
             <Label htmlFor="material">Select Material</Label>
             <Select
               value={materialId}
-              onValueChange={setMaterialId}
+              onValueChange={(v) => setMaterialId(v || "")}
               disabled={materialsLoading}
             >
               <SelectTrigger id="material" className="w-full min-h-11">
