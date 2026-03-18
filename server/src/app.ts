@@ -8,6 +8,7 @@ import { env } from "./config/env";
 import { globalLimiter } from "./middleware/rate-limit";
 import { errorHandler } from "./middleware/error-handler";
 import { notFoundHandler } from "./middleware/not-found";
+import healthRoutes from "./routes/health.routes";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import materialRoutes from "./routes/material.routes";
@@ -34,10 +35,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(globalLimiter);
 
-// Health check
-app.get("/api/health", (_req, res) => {
-  res.json({ success: true, data: { status: "ok", timestamp: new Date().toISOString() } });
-});
+// Health check (no auth required, before other routes)
+app.use("/api/health", healthRoutes);
 
 // Routes
 app.use("/api/auth", authRoutes);
