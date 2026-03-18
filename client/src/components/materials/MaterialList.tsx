@@ -49,26 +49,28 @@ export function MaterialList({
       </div>
 
       {pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between pt-4">
-          <p className="text-sm text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+          <p className="text-sm text-muted-foreground order-2 sm:order-1">
             {pagination.total} material{pagination.total !== 1 ? "s" : ""}{" "}
             total
           </p>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 order-1 sm:order-2">
             <Button
               variant="outline"
               size="sm"
+              className="min-h-10 min-w-10"
               onClick={() => onPageChange(pagination.page - 1)}
               disabled={pagination.page <= 1}
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <span className="text-sm">
+            <span className="text-sm px-2">
               Page {pagination.page} of {pagination.totalPages}
             </span>
             <Button
               variant="outline"
               size="sm"
+              className="min-h-10 min-w-10"
               onClick={() => onPageChange(pagination.page + 1)}
               disabled={pagination.page >= pagination.totalPages}
             >

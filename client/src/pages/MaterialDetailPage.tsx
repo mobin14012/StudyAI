@@ -37,13 +37,13 @@ export function MaterialDetailPage() {
 
   if (error || !material) {
     return (
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         <p className="text-destructive">
           Material not found or failed to load.
         </p>
         <Button
           variant="outline"
-          className="mt-4"
+          className="mt-4 min-h-11"
           onClick={() => navigate("/materials")}
         >
           Back to Materials
@@ -53,12 +53,12 @@ export function MaterialDetailPage() {
   }
 
   return (
-    <div className="p-6 max-w-4xl space-y-6">
+    <div className="p-4 md:p-6 max-w-4xl space-y-6">
       {/* Top bar */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <Button
           variant="ghost"
-          className="gap-2"
+          className="gap-2 min-h-11 justify-start sm:justify-center"
           onClick={() => navigate("/materials")}
         >
           <ArrowLeft className="h-4 w-4" />
@@ -74,7 +74,7 @@ export function MaterialDetailPage() {
           <Button
             variant="destructive"
             size="sm"
-            className="gap-2"
+            className="gap-2 min-h-10 flex-1 sm:flex-none"
             onClick={handleDelete}
             disabled={deleteMaterial.isPending}
           >

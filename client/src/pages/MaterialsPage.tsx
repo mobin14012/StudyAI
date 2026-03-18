@@ -10,16 +10,16 @@ export function MaterialsPage() {
   const { data, isLoading } = useMaterials({ page });
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="p-4 md:p-6 space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold">My Materials</h2>
-          <p className="text-muted-foreground">
+          <h2 className="text-xl md:text-2xl font-bold">My Materials</h2>
+          <p className="text-sm text-muted-foreground">
             Your uploaded study materials and detected topics.
           </p>
         </div>
-        <Link to="/upload">
-          <Button className="gap-2">
+        <Link to="/upload" className="shrink-0">
+          <Button className="gap-2 w-full sm:w-auto min-h-11">
             <Upload className="h-4 w-4" />
             Upload New
           </Button>
