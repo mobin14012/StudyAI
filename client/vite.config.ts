@@ -5,6 +5,10 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), tsconfigPaths()],
+  build: {
+    outDir: "dist",
+    sourcemap: false,
+  },
   server: {
     port: 5173,
     proxy: {
