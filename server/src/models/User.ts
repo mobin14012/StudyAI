@@ -12,6 +12,10 @@ export interface IUser extends Document {
   name: string;
   level: "junior" | "senior";
   refreshTokens: IRefreshToken[];
+  dailyGoal: number;
+  lastActivityDate?: Date;
+  currentStreak: number;
+  longestStreak: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -53,6 +57,25 @@ const userSchema = new Schema<IUser>(
     refreshTokens: {
       type: [refreshTokenSchema],
       default: [],
+    },
+    dailyGoal: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+    lastActivityDate: {
+      type: Date,
+    },
+    currentStreak: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    longestStreak: {
+      type: Number,
+      default: 0,
+      min: 0,
     },
   },
   {
