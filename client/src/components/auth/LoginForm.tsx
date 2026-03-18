@@ -29,7 +29,7 @@ export function LoginForm({ onSubmit, isLoading, error }: LoginFormProps) {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Welcome back</CardTitle>
+        <CardTitle className="text-xl md:text-2xl">Welcome back</CardTitle>
         <CardDescription>Sign in to your StudyAI account</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -41,20 +41,32 @@ export function LoginForm({ onSubmit, isLoading, error }: LoginFormProps) {
           )}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="you@example.com" {...register("email")} />
+            <Input 
+              id="email" 
+              type="email" 
+              placeholder="you@example.com" 
+              className="min-h-11"
+              {...register("email")} 
+            />
             {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" placeholder="••••••••" {...register("password")} />
+            <Input 
+              id="password" 
+              type="password" 
+              placeholder="••••••••" 
+              className="min-h-11"
+              {...register("password")} 
+            />
             {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="w-full min-h-11" disabled={isLoading}>
             {isLoading ? <LoadingSpinner size="sm" /> : "Sign In"}
           </Button>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground text-center">
             Don't have an account?{" "}
             <Link to="/register" className="text-primary hover:underline">
               Create one

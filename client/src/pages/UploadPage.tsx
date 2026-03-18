@@ -83,8 +83,8 @@ export function UploadPage() {
   // Uploading / Processing state
   if (state.phase === "uploading") {
     return (
-      <div className="p-6 max-w-2xl">
-        <h2 className="text-2xl font-bold mb-6">Upload Materials</h2>
+      <div className="p-4 md:p-6 max-w-2xl">
+        <h2 className="text-xl md:text-2xl font-bold mb-6">Upload Materials</h2>
         <Card>
           <CardContent className="pt-6">
             <UploadProgress
@@ -100,11 +100,13 @@ export function UploadPage() {
   // Topic review state
   if (state.phase === "review") {
     return (
-      <div className="p-6 max-w-2xl">
-        <h2 className="text-2xl font-bold mb-6">Upload Materials</h2>
+      <div className="p-4 md:p-6 max-w-2xl">
+        <h2 className="text-xl md:text-2xl font-bold mb-6">Upload Materials</h2>
         <Card>
           <CardHeader>
-            <CardTitle>Review Topics — {state.material.filename}</CardTitle>
+            <CardTitle className="text-base md:text-lg break-all">
+              Review Topics — {state.material.filename}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <TopicReview
@@ -112,16 +114,17 @@ export function UploadPage() {
               onSave={handleSaveTopics}
               isSaving={updateTopics.isPending}
             />
-            <div className="flex gap-3 mt-4 pt-4 border-t">
+            <div className="flex flex-col sm:flex-row gap-3 mt-4 pt-4 border-t">
               <Button
                 variant="outline"
+                className="min-h-11 flex-1"
                 onClick={() =>
                   navigate(`/materials/${state.material.id}`)
                 }
               >
                 View Material
               </Button>
-              <Button variant="outline" onClick={handleReset}>
+              <Button variant="outline" className="min-h-11 flex-1" onClick={handleReset}>
                 Upload Another
               </Button>
             </div>
@@ -134,13 +137,13 @@ export function UploadPage() {
   // Error state
   if (state.phase === "error") {
     return (
-      <div className="p-6 max-w-2xl">
-        <h2 className="text-2xl font-bold mb-6">Upload Materials</h2>
+      <div className="p-4 md:p-6 max-w-2xl">
+        <h2 className="text-xl md:text-2xl font-bold mb-6">Upload Materials</h2>
         <Card>
           <CardContent className="pt-6">
             <div className="text-center space-y-4">
               <p className="text-destructive">{state.message}</p>
-              <Button onClick={handleReset}>Try Again</Button>
+              <Button onClick={handleReset} className="min-h-11">Try Again</Button>
             </div>
           </CardContent>
         </Card>
@@ -150,24 +153,24 @@ export function UploadPage() {
 
   // Idle state — show upload form
   return (
-    <div className="p-6 max-w-2xl">
-      <h2 className="text-2xl font-bold mb-6">Upload Materials</h2>
+    <div className="p-4 md:p-6 max-w-2xl">
+      <h2 className="text-xl md:text-2xl font-bold mb-6">Upload Materials</h2>
       <Tabs defaultValue="pdf">
-        <TabsList className="mb-4">
-          <TabsTrigger value="pdf" className="gap-2">
+        <TabsList className="mb-4 w-full grid grid-cols-2">
+          <TabsTrigger value="pdf" className="gap-2 min-h-10">
             <Upload className="h-4 w-4" />
-            Upload PDF
+            <span className="hidden sm:inline">Upload</span> PDF
           </TabsTrigger>
-          <TabsTrigger value="text" className="gap-2">
+          <TabsTrigger value="text" className="gap-2 min-h-10">
             <FileText className="h-4 w-4" />
-            Paste Text
+            <span className="hidden sm:inline">Paste</span> Text
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="pdf">
           <Card>
             <CardHeader>
-              <CardTitle>Upload PDF</CardTitle>
+              <CardTitle className="text-base md:text-lg">Upload PDF</CardTitle>
             </CardHeader>
             <CardContent>
               <FileUploadZone onFileSelect={handleFileSelect} />
@@ -178,7 +181,7 @@ export function UploadPage() {
         <TabsContent value="text">
           <Card>
             <CardHeader>
-              <CardTitle>Paste Study Material</CardTitle>
+              <CardTitle className="text-base md:text-lg">Paste Study Material</CardTitle>
             </CardHeader>
             <CardContent>
               <TextUploadForm onSubmit={handleTextSubmit} />

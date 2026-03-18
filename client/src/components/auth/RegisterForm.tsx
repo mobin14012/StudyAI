@@ -32,7 +32,7 @@ export function RegisterForm({ onSubmit, isLoading, error }: RegisterFormProps) 
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Create account</CardTitle>
+        <CardTitle className="text-xl md:text-2xl">Create account</CardTitle>
         <CardDescription>Get started with StudyAI</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -44,23 +44,40 @@ export function RegisterForm({ onSubmit, isLoading, error }: RegisterFormProps) 
           )}
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
-            <Input id="name" placeholder="Your name" {...register("name")} />
+            <Input 
+              id="name" 
+              placeholder="Your name" 
+              className="min-h-11"
+              {...register("name")} 
+            />
             {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
           </div>
           <div className="space-y-2">
             <Label htmlFor="reg-email">Email</Label>
-            <Input id="reg-email" type="email" placeholder="you@example.com" {...register("email")} />
+            <Input 
+              id="reg-email" 
+              type="email" 
+              placeholder="you@example.com" 
+              className="min-h-11"
+              {...register("email")} 
+            />
             {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
           </div>
           <div className="space-y-2">
             <Label htmlFor="reg-password">Password</Label>
-            <Input id="reg-password" type="password" placeholder="••••••••" {...register("password")} />
+            <Input 
+              id="reg-password" 
+              type="password" 
+              placeholder="••••••••" 
+              className="min-h-11"
+              {...register("password")} 
+            />
             {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
           </div>
           <div className="space-y-2">
             <Label>Level</Label>
             <Select defaultValue="junior" onValueChange={(value) => setValue("level", value as "junior" | "senior")}>
-              <SelectTrigger>
+              <SelectTrigger className="min-h-11">
                 <SelectValue placeholder="Select your level" />
               </SelectTrigger>
               <SelectContent>
@@ -72,10 +89,10 @@ export function RegisterForm({ onSubmit, isLoading, error }: RegisterFormProps) 
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="w-full min-h-11" disabled={isLoading}>
             {isLoading ? <LoadingSpinner size="sm" /> : "Create Account"}
           </Button>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground text-center">
             Already have an account?{" "}
             <Link to="/login" className="text-primary hover:underline">
               Sign in

@@ -41,19 +41,19 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
-      <h2 className="text-2xl font-bold mb-6">Profile Settings</h2>
+    <div className="p-4 md:p-6 max-w-4xl mx-auto space-y-6">
+      <h2 className="text-xl md:text-2xl font-bold mb-6">Profile Settings</h2>
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Account Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Account Information</CardTitle>
+            <CardTitle className="text-base md:text-lg">Account Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label>Email</Label>
-              <Input value={user?.email || ""} disabled className="bg-muted" />
+              <Input value={user?.email || ""} disabled className="bg-muted min-h-11" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="profile-name">Name</Label>
@@ -61,6 +61,7 @@ export function ProfilePage() {
                 id="profile-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                className="min-h-11"
               />
             </div>
             <div className="space-y-2">
@@ -70,7 +71,7 @@ export function ProfilePage() {
                 Your level affects the default difficulty of generated questions.
               </p>
             </div>
-            <Button onClick={handleSave} disabled={updateMutation.isPending}>
+            <Button onClick={handleSave} disabled={updateMutation.isPending} className="w-full sm:w-auto min-h-11">
               {updateMutation.isPending ? <LoadingSpinner size="sm" /> : "Save Changes"}
             </Button>
           </CardContent>
@@ -79,7 +80,7 @@ export function ProfilePage() {
         {/* Goals & Streaks */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-base md:text-lg">
               <Target className="h-5 w-5" />
               Goals & Streaks
             </CardTitle>
@@ -94,25 +95,26 @@ export function ProfilePage() {
                 max={100}
                 value={dailyGoal}
                 onChange={(e) => setDailyGoal(parseInt(e.target.value) || 10)}
+                className="min-h-11"
               />
               <p className="text-xs text-muted-foreground">
                 How many questions you want to practice each day.
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 pt-4">
-              <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-                <Flame className="h-8 w-8 text-orange-500" />
-                <div>
-                  <p className="text-2xl font-bold">{user?.currentStreak || 0}</p>
-                  <p className="text-xs text-muted-foreground">Current Streak</p>
+            <div className="grid grid-cols-2 gap-3 pt-4">
+              <div className="flex items-center gap-2 md:gap-3 p-3 bg-muted rounded-lg">
+                <Flame className="h-6 w-6 md:h-8 md:w-8 text-orange-500 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-xl md:text-2xl font-bold">{user?.currentStreak || 0}</p>
+                  <p className="text-xs text-muted-foreground truncate">Current Streak</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-                <Trophy className="h-8 w-8 text-yellow-500" />
-                <div>
-                  <p className="text-2xl font-bold">{user?.longestStreak || 0}</p>
-                  <p className="text-xs text-muted-foreground">Longest Streak</p>
+              <div className="flex items-center gap-2 md:gap-3 p-3 bg-muted rounded-lg">
+                <Trophy className="h-6 w-6 md:h-8 md:w-8 text-yellow-500 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-xl md:text-2xl font-bold">{user?.longestStreak || 0}</p>
+                  <p className="text-xs text-muted-foreground truncate">Longest Streak</p>
                 </div>
               </div>
             </div>
