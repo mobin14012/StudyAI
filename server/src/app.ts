@@ -15,6 +15,8 @@ import questionRoutes from "./routes/question.routes";
 import practiceRoutes from "./routes/practice.routes";
 import analyticsRoutes from "./routes/analytics.routes";
 import tutorRoutes from "./routes/tutor.routes";
+import bookmarkRoutes from "./routes/bookmark.routes";
+import noteRoutes from "./routes/note.routes";
 
 const app = express();
 
@@ -45,6 +47,8 @@ app.use("/api/questions", questionRoutes);
 app.use("/api/practice", practiceRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/tutor", tutorRoutes);
+app.use("/api/bookmarks", bookmarkRoutes);
+app.use("/api/notes", noteRoutes);
 
 // 404 handler
 app.use(notFoundHandler);
