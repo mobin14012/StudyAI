@@ -7,7 +7,7 @@ import { Upload } from "lucide-react";
 
 export function MaterialsPage() {
   const [page, setPage] = useState(1);
-  const { data, isLoading } = useMaterials(page);
+  const { data, isLoading } = useMaterials({ page });
 
   return (
     <div className="p-6 space-y-6">

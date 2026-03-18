@@ -1,4 +1,5 @@
 import { Material, IMaterial } from "../models/Material";
+import { Question } from "../models/Question";
 import { extractTextFromPdf } from "../utils/pdf-parser";
 import { detectTopics } from "./ai/topic-detector";
 import { generateSummary as generateAiSummary } from "./ai/summarizer";
@@ -261,6 +262,7 @@ export async function getOrGenerateSummary(
 
 /**
  * Delete a material by ID, scoped to user.
+ * Also deletes all associated questions (cascade delete).
  */
 export async function deleteMaterial(
   materialId: string,
@@ -273,5 +275,13 @@ export async function deleteMaterial(
 
   if (result.deletedCount === 0) {
     throw new AppError("Material not found", 404, "MATERIAL_NOT_FOUND");
+  }
+
+  // Cascade delete all questions for this material
+  const questionResult = await Question.deleteMany({ materialId, userId });
+  if (questionResult.deletedCount > 0) {
+    logger.info(
+      `Deleted ${questionResult.deletedCount} questions for material ${materialId}`
+    );
   }
 }

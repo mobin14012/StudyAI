@@ -10,10 +10,17 @@ import {
 } from "@/api/materials";
 import type { Topic } from "@/types";
 
-export function useMaterials(page = 1) {
+export interface UseMaterialsOptions {
+  page?: number;
+  limit?: number;
+  status?: "processing" | "ready" | "error";
+}
+
+export function useMaterials(options: UseMaterialsOptions = {}) {
+  const { page = 1, limit = 20, status } = options;
   return useQuery({
-    queryKey: ["materials", page],
-    queryFn: () => getMaterialsApi(page),
+    queryKey: ["materials", page, limit, status],
+    queryFn: () => getMaterialsApi(page, limit, status),
   });
 }
 

@@ -51,7 +51,7 @@ export function TutorPage() {
           ) : readyMaterials.length === 0 ? (
             <p className="text-muted-foreground">No materials available. Upload some study materials first.</p>
           ) : (
-            <Select value={selectedMaterialId} onValueChange={setSelectedMaterialId}>
+            <Select value={selectedMaterialId} onValueChange={(val) => setSelectedMaterialId(val || "")}>
               <SelectTrigger>
                 <SelectValue placeholder="Choose a material to discuss" />
               </SelectTrigger>

@@ -28,11 +28,17 @@ export async function uploadTextApi(
 
 export async function getMaterialsApi(
   page = 1,
-  limit = 20
+  limit = 20,
+  status?: "processing" | "ready" | "error"
 ): Promise<MaterialListResponse> {
-  const response = await api.get(
-    `/materials?page=${page}&limit=${limit}`
-  );
+  const params = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
+  if (status) {
+    params.append("status", status);
+  }
+  const response = await api.get(`/materials?${params.toString()}`);
   return {
     data: response.data.data,
     pagination: response.data.pagination,

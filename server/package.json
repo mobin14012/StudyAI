@@ -22,6 +22,7 @@
     "multer": "^2.1.1",
     "openai": "^6.31.0",
     "pdf-parse": "^1.1.1",
+    "uuid": "^13.0.0",
     "winston": "^3.17.0",
     "zod": "^3.24.0"
   },
@@ -35,6 +36,7 @@
     "@types/morgan": "latest",
     "@types/multer": "^2.1.0",
     "@types/pdf-parse": "^1.1.5",
+    "@types/uuid": "^10.0.0",
     "nodemon": "^3.1.0",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0"
