@@ -74,11 +74,9 @@ export function NotesPage() {
           Notes
         </h2>
         <Dialog open={isCreating} onOpenChange={setIsCreating}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              New Note
-            </Button>
+          <DialogTrigger render={<Button />}>
+            <Plus className="h-4 w-4 mr-2" />
+            New Note
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>

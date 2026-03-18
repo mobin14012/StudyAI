@@ -11,6 +11,12 @@ import { ProgressPage } from "@/pages/ProgressPage";
 import { UploadPage } from "@/pages/UploadPage";
 import { MaterialsPage } from "@/pages/MaterialsPage";
 import { MaterialDetailPage } from "@/pages/MaterialDetailPage";
+import { GenerateQuestionsPage } from "@/pages/GenerateQuestionsPage";
+import { QuestionsPage } from "@/pages/QuestionsPage";
+import { PracticePage } from "@/pages/PracticePage";
+import { TutorPage } from "@/pages/TutorPage";
+import { BookmarksPage } from "@/pages/BookmarksPage";
+import { NotesPage } from "@/pages/NotesPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,16 +26,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-// Placeholder pages for Phase 3+ features
-function PracticePlaceholder() {
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Practice</h2>
-      <p className="text-muted-foreground">Upload study materials to start practicing.</p>
-    </div>
-  );
-}
 
 function App() {
   return (
@@ -44,11 +40,16 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               <Route path="/" element={<DashboardPage />} />
-              <Route path="/practice" element={<PracticePlaceholder />} />
+              <Route path="/practice" element={<PracticePage />} />
               <Route path="/upload" element={<UploadPage />} />
               <Route path="/materials" element={<MaterialsPage />} />
               <Route path="/materials/:id" element={<MaterialDetailPage />} />
+              <Route path="/questions" element={<QuestionsPage />} />
+              <Route path="/questions/generate" element={<GenerateQuestionsPage />} />
               <Route path="/progress" element={<ProgressPage />} />
+              <Route path="/tutor" element={<TutorPage />} />
+              <Route path="/bookmarks" element={<BookmarksPage />} />
+              <Route path="/notes" element={<NotesPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Route>
           </Route>
