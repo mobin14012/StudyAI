@@ -16,7 +16,7 @@
 | 3 | Question Generation | Generate diverse AI-powered questions from user materials with caching | 8 | 3 |
 | 4 | Practice Engine | Build the core study loop — practice sessions, answer evaluation, feedback, and attempt tracking | 8 | 3 |
 | 5 | Adaptive Learning & Analytics | Track weak topics, enable drill mode, and deliver analytics dashboard | 13 | 4 |
-| 6 | AI Tutor & Extras | Add conversational AI tutor, Pomodoro timer, bookmarks, notes, and goal features | 4 | 3 |
+| 6 | AI Tutor & Extras | Add conversational AI tutor grounded in user materials, plus engagement features: Pomodoro timer, daily streaks, goal setting, bookmarks, and notes | 4 | 3 (1/? done) |
 | 7 | Polish & Deploy | Final UI polish, mobile optimization, performance, and production deployment | 6 | 3 |
 
 ---
