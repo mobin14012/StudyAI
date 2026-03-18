@@ -67,18 +67,18 @@ export function NotesPage() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <FileText className="h-6 w-6" />
+    <div className="p-4 md:p-6 max-w-4xl mx-auto space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+          <FileText className="h-5 w-5 md:h-6 md:w-6" />
           Notes
         </h2>
         <Dialog open={isCreating} onOpenChange={setIsCreating}>
-          <DialogTrigger render={<Button />}>
+          <DialogTrigger render={<Button className="w-full sm:w-auto min-h-11" />}>
             <Plus className="h-4 w-4 mr-2" />
             New Note
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Create Note</DialogTitle>
             </DialogHeader>
@@ -87,20 +87,23 @@ export function NotesPage() {
                 placeholder="Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                className="min-h-11"
               />
               <Textarea
                 placeholder="Write your note..."
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                rows={8}
+                rows={6}
+                className="min-h-[120px]"
               />
-              <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={closeDialog}>
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-2">
+                <Button variant="outline" onClick={closeDialog} className="min-h-11">
                   Cancel
                 </Button>
                 <Button
                   onClick={handleCreate}
                   disabled={!title.trim() || !content.trim() || createMutation.isPending}
+                  className="min-h-11"
                 >
                   {createMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create"}
                 </Button>
@@ -117,7 +120,7 @@ export function NotesPage() {
           placeholder="Search notes..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="pl-10"
+          className="pl-10 min-h-11"
         />
       </div>
 
@@ -142,16 +145,17 @@ export function NotesPage() {
         <div className="grid gap-4 md:grid-cols-2">
           {notes.map((note) => (
             <Card key={note.id} className="hover:bg-muted/50 transition-colors">
-              <CardHeader className="pb-2">
-                <div className="flex items-start justify-between">
-                  <CardTitle className="text-lg">{note.title}</CardTitle>
-                  <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" onClick={() => openEdit(note)}>
+              <CardHeader className="p-4 pb-2">
+                <div className="flex items-start justify-between gap-2">
+                  <CardTitle className="text-base md:text-lg line-clamp-1">{note.title}</CardTitle>
+                  <div className="flex gap-1 shrink-0">
+                    <Button variant="ghost" size="icon" className="min-h-10 min-w-10" onClick={() => openEdit(note)}>
                       <Pencil className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
+                      className="min-h-10 min-w-10"
                       onClick={() => handleDelete(note.id)}
                       disabled={deleteMutation.isPending}
                     >
@@ -160,7 +164,7 @@ export function NotesPage() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 pt-0">
                 <p className="text-sm text-muted-foreground line-clamp-3">
                   {note.content}
                 </p>
@@ -175,7 +179,7 @@ export function NotesPage() {
 
       {/* Edit Dialog */}
       <Dialog open={!!editingNote} onOpenChange={(open) => !open && closeDialog()}>
-        <DialogContent>
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Note</DialogTitle>
           </DialogHeader>
@@ -184,20 +188,23 @@ export function NotesPage() {
               placeholder="Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              className="min-h-11"
             />
             <Textarea
               placeholder="Write your note..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              rows={8}
+              rows={6}
+              className="min-h-[120px]"
             />
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={closeDialog}>
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2">
+              <Button variant="outline" onClick={closeDialog} className="min-h-11">
                 Cancel
               </Button>
               <Button
                 onClick={handleUpdate}
                 disabled={!title.trim() || !content.trim() || updateMutation.isPending}
+                className="min-h-11"
               >
                 {updateMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
               </Button>
