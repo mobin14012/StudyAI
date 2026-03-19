@@ -15,7 +15,8 @@ import { DifficultySelector } from "./DifficultySelector";
 import { useMaterials, useMaterial } from "@/hooks/use-materials";
 import { useAuthStore } from "@/stores/auth-store";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
-import { Sparkles, AlertCircle, RefreshCw } from "lucide-react";
+import { Sparkles, AlertCircle, RefreshCw, BookOpen, Upload } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import type { QuestionType, DifficultyLevel, GenerateQuestionsRequest } from "@/types";
 
@@ -28,6 +29,7 @@ export function GenerateQuestionsForm({
   onSubmit,
   isLoading,
 }: GenerateQuestionsFormProps) {
+  const navigate = useNavigate();
   const { user } = useAuthStore();
   const { 
     data: materialsData, 
@@ -53,8 +55,9 @@ export function GenerateQuestionsForm({
     setSelectedTopic("");
   }, [materialId]);
 
-  // Get ready materials
-  const readyMaterials = materialsData?.data || [];
+  // Get ready materials - filter to only those with topics
+  const allReadyMaterials = materialsData?.data || [];
+  const materialsWithTopics = allReadyMaterials.filter(m => m.topicCount > 0);
 
   // Get selected topics from material
   const availableTopics = materialDetail?.topics.filter((t) => t.selected) || [];
@@ -114,6 +117,39 @@ export function GenerateQuestionsForm({
     );
   }
 
+  // Empty state - no materials with topics available
+  if (materialsWithTopics.length === 0) {
+    const hasAnyMaterials = allReadyMaterials.length > 0;
+    
+    return (
+      <div className="text-center py-8 space-y-4">
+        <BookOpen className="h-10 w-10 text-muted-foreground mx-auto" />
+        <div>
+          <p className="font-medium">No materials ready for question generation</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            {hasAnyMaterials 
+              ? "Your materials don't have topics yet. Go to Materials page and click 'Retry Detection' to detect topics."
+              : "Upload study materials first to generate questions."
+            }
+          </p>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-2 justify-center">
+          {hasAnyMaterials ? (
+            <Button onClick={() => navigate("/materials")} className="gap-2">
+              <BookOpen className="h-4 w-4" />
+              Go to Materials
+            </Button>
+          ) : (
+            <Button onClick={() => navigate("/materials")} className="gap-2">
+              <Upload className="h-4 w-4" />
+              Upload Materials
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Step 1: Select Material */}
@@ -124,18 +160,16 @@ export function GenerateQuestionsForm({
             <SelectValue placeholder="Select a material" />
           </SelectTrigger>
           <SelectContent>
-            {readyMaterials.map((material) => (
+            {materialsWithTopics.map((material) => (
               <SelectItem key={material.id} value={material.id}>
                 {material.filename}
+                <span className="text-muted-foreground ml-2">
+                  ({material.topicCount} topics)
+                </span>
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        {readyMaterials.length === 0 && (
-          <p className="text-sm text-muted-foreground">
-            No materials available. Upload a document first.
-          </p>
-        )}
       </div>
 
       {/* Step 2: Select Topic */}

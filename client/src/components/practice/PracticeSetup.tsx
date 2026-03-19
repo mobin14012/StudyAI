@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useMaterials } from "@/hooks/use-materials";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
-import { AlertCircle, RefreshCw } from "lucide-react";
+import { AlertCircle, RefreshCw, Upload, BookOpen } from "lucide-react";
 import type { StartPracticeRequest } from "@/types";
 
 interface PracticeSetupProps {
@@ -20,6 +21,7 @@ interface PracticeSetupProps {
 }
 
 export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
+  const navigate = useNavigate();
   const [mode, setMode] = useState<"general" | "weak_topic">("general");
   const [materialId, setMaterialId] = useState("");
   const [questionCount, setQuestionCount] = useState(10);
@@ -48,6 +50,9 @@ export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
     refetch();
   };
 
+  // Filter materials that have topics (needed for question generation)
+  const materialsWithTopics = materials?.data?.filter(m => m.topicCount > 0) || [];
+  
   const canStart =
     mode === "weak_topic" || (mode === "general" && materialId);
 
@@ -90,6 +95,41 @@ export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
     );
   }
 
+  // Show empty state if no materials with topics
+  if (materialsWithTopics.length === 0) {
+    const hasAnyMaterials = (materials?.data?.length || 0) > 0;
+    
+    return (
+      <Card className="max-w-md mx-auto">
+        <CardContent className="py-12 text-center space-y-4">
+          <BookOpen className="h-12 w-12 text-muted-foreground mx-auto" />
+          <div>
+            <p className="font-medium">No materials ready for practice</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              {hasAnyMaterials 
+                ? "Your materials don't have topics yet. Go to Materials page and click 'Retry Detection' to detect topics."
+                : "Upload study materials and generate questions first to start practicing."
+              }
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2 justify-center">
+            {hasAnyMaterials ? (
+              <Button onClick={() => navigate("/materials")} className="gap-2">
+                <BookOpen className="h-4 w-4" />
+                Go to Materials
+              </Button>
+            ) : (
+              <Button onClick={() => navigate("/materials")} className="gap-2">
+                <Upload className="h-4 w-4" />
+                Upload Materials
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="max-w-md mx-auto">
       <CardHeader>
@@ -126,24 +166,21 @@ export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
             <Select
               value={materialId}
               onValueChange={(v) => setMaterialId(v || "")}
-              disabled={materialsLoading}
             >
               <SelectTrigger id="material" className="w-full min-h-11">
                 <SelectValue placeholder="Select a material..." />
               </SelectTrigger>
               <SelectContent>
-                {materials?.data?.map((material) => (
+                {materialsWithTopics.map((material) => (
                   <SelectItem key={material.id} value={material.id}>
                     <span className="truncate">{material.filename}</span>
+                    <span className="text-muted-foreground ml-2">
+                      ({material.topicCount} topics)
+                    </span>
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            {materials?.data?.length === 0 && (
-              <p className="text-sm text-muted-foreground">
-                No materials with topics available. Upload a document first.
-              </p>
-            )}
           </div>
         )}
 
