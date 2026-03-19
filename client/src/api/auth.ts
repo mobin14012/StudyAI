@@ -2,6 +2,8 @@ import api from "./client";
 import axios from "axios";
 import type { AuthResponse, User } from "@/types";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 export async function loginApi(data: { email: string; password: string }): Promise<AuthResponse> {
   const response = await api.post("/auth/login", data);
   return response.data.data;
@@ -18,7 +20,7 @@ export async function registerApi(data: {
 }
 
 export async function refreshApi(): Promise<AuthResponse> {
-  const response = await axios.post("/api/auth/refresh", {}, { withCredentials: true });
+  const response = await axios.post(`${API_URL}/api/auth/refresh`, {}, { withCredentials: true });
   return response.data.data;
 }
 
