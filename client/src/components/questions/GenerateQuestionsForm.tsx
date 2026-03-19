@@ -14,7 +14,8 @@ import { QuestionTypeSelector } from "./QuestionTypeSelector";
 import { DifficultySelector } from "./DifficultySelector";
 import { useMaterials, useMaterial } from "@/hooks/use-materials";
 import { useAuthStore } from "@/stores/auth-store";
-import { Sparkles } from "lucide-react";
+import { LoadingSpinner } from "@/components/common/LoadingSpinner";
+import { Sparkles, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { QuestionType, DifficultyLevel, GenerateQuestionsRequest } from "@/types";
 
@@ -28,7 +29,7 @@ export function GenerateQuestionsForm({
   isLoading,
 }: GenerateQuestionsFormProps) {
   const { user } = useAuthStore();
-  const { data: materialsData } = useMaterials();
+  const { data: materialsData, isLoading: materialsLoading, error: materialsError } = useMaterials({ status: "ready" });
 
   const [materialId, setMaterialId] = useState<string>("");
   const [selectedTopic, setSelectedTopic] = useState<string>("");
@@ -46,8 +47,8 @@ export function GenerateQuestionsForm({
     setSelectedTopic("");
   }, [materialId]);
 
-  // Filter to ready materials only
-  const readyMaterials = materialsData?.data.filter((m) => m.status === "ready") || [];
+  // Get ready materials
+  const readyMaterials = materialsData?.data || [];
 
   // Get selected topics from material
   const availableTopics = materialDetail?.topics.filter((t) => t.selected) || [];
@@ -66,6 +67,28 @@ export function GenerateQuestionsForm({
   };
 
   const isValid = materialId && selectedTopic && types.length > 0;
+
+  // Loading state
+  if (materialsLoading) {
+    return (
+      <div className="flex justify-center py-8">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
+
+  // Error state
+  if (materialsError) {
+    return (
+      <div className="text-center py-8 space-y-2">
+        <AlertCircle className="h-8 w-8 text-destructive mx-auto" />
+        <p className="text-sm text-destructive">Failed to load materials</p>
+        <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+          Retry
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

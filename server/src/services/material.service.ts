@@ -101,17 +101,25 @@ export async function processUpload(
 export async function getMaterials(
   userId: string,
   page: number,
-  limit: number
+  limit: number,
+  status?: "processing" | "ready" | "error"
 ) {
   const skip = (page - 1) * limit;
+  
+  // Build query filter
+  const filter: { userId: string; status?: string } = { userId };
+  if (status) {
+    filter.status = status;
+  }
+  
   const [materials, total] = await Promise.all([
-    Material.find({ userId })
+    Material.find(filter)
       .select("-extractedText -summary")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .lean(),
-    Material.countDocuments({ userId }),
+    Material.countDocuments(filter),
   ]);
 
   return {

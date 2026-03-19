@@ -55,7 +55,7 @@ router.get(
   async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const query = materialListQuerySchema.parse(req.query);
-      const result = await getMaterials(req.userId!, query.page, query.limit);
+      const result = await getMaterials(req.userId!, query.page, query.limit, query.status);
       res.json({
         success: true,
         data: result.data,

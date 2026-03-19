@@ -56,6 +56,31 @@ Return ONLY a JSON object in this exact format:
       throw error;
     }
 
+    // Check for common OpenAI errors
+    if (error.code === "insufficient_quota" || error.message?.includes("quota")) {
+      throw new AppError(
+        "AI service quota exceeded. Please try again later.",
+        503,
+        "AI_QUOTA_EXCEEDED"
+      );
+    }
+
+    if (error.code === "invalid_api_key" || error.message?.includes("API key")) {
+      throw new AppError(
+        "AI service configuration error. Please contact support.",
+        503,
+        "AI_CONFIG_ERROR"
+      );
+    }
+
+    if (error.name === "SyntaxError" || error instanceof z.ZodError) {
+      throw new AppError(
+        "Failed to parse AI response. Please try again.",
+        500,
+        "AI_PARSE_ERROR"
+      );
+    }
+
     throw new AppError(
       "Unable to detect topics. Please try again.",
       500,
