@@ -4,13 +4,26 @@ import { useAuthStore } from "@/stores/auth-store";
 import { loginApi, registerApi, logoutApi, refreshApi } from "@/api/auth";
 import type { AuthResponse } from "@/types";
 
+// Track if we've already attempted refresh this session
+let hasAttemptedRefresh = false;
+
 export function useAuth() {
-  const { user, isAuthenticated, isLoading, setAuth, logout: clearAuth } =
+  const { user, isAuthenticated, isLoading, setAuth, setLoading, logout: clearAuth } =
     useAuthStore();
 
-  // Silent refresh on mount
+  // Silent refresh on initial app load only
   useEffect(() => {
+    // Skip if already authenticated or already attempted refresh
+    if (isAuthenticated || hasAttemptedRefresh) {
+      if (isLoading) {
+        setLoading(false);
+      }
+      return;
+    }
+
+    hasAttemptedRefresh = true;
     let cancelled = false;
+
     async function tryRefresh() {
       try {
         const data = await refreshApi();
@@ -24,10 +37,11 @@ export function useAuth() {
       }
     }
     tryRefresh();
+
     return () => {
       cancelled = true;
     };
-  }, [setAuth, clearAuth]);
+  }, [isAuthenticated, isLoading, setAuth, setLoading, clearAuth]);
 
   const loginMutation = useMutation({
     mutationFn: loginApi,
