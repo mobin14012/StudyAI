@@ -1,27 +1,34 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/auth-store";
 import { loginApi, registerApi, logoutApi, refreshApi } from "@/api/auth";
 import type { AuthResponse } from "@/types";
 
-// Track if we've already attempted refresh this session
-let hasAttemptedRefresh = false;
-
 export function useAuth() {
   const { user, isAuthenticated, isLoading, setAuth, setLoading, logout: clearAuth } =
     useAuthStore();
+  
+  // Track if refresh has been attempted (per component instance)
+  const hasAttemptedRef = useRef(false);
 
   // Silent refresh on initial app load only
   useEffect(() => {
-    // Skip if already authenticated or already attempted refresh
-    if (isAuthenticated || hasAttemptedRefresh) {
+    // Skip if already attempted in this component
+    if (hasAttemptedRef.current) {
+      return;
+    }
+    
+    // Skip if already authenticated
+    if (isAuthenticated) {
       if (isLoading) {
         setLoading(false);
       }
       return;
     }
 
-    hasAttemptedRefresh = true;
+    // Mark as attempted
+    hasAttemptedRef.current = true;
+
     let cancelled = false;
 
     async function tryRefresh() {
@@ -36,12 +43,14 @@ export function useAuth() {
         }
       }
     }
+    
     tryRefresh();
 
     return () => {
       cancelled = true;
     };
-  }, [isAuthenticated, isLoading, setAuth, setLoading, clearAuth]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty deps - only run once on mount
 
   const loginMutation = useMutation({
     mutationFn: loginApi,
