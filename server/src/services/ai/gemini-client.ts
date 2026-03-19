@@ -1,7 +1,26 @@
-import { geminiModel } from "../../config/gemini";
+import { genAI } from "../../config/gemini";
 import { logger } from "../../config/logger";
 
-const MAX_RETRIES = 1;
+const MAX_RETRIES = 2;
+
+/**
+ * Extract JSON from a response that might have markdown code blocks
+ */
+function extractJson(text: string): string {
+  // Try to extract JSON from markdown code blocks
+  const jsonBlockMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (jsonBlockMatch) {
+    return jsonBlockMatch[1].trim();
+  }
+  
+  // Try to find JSON object directly
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    return jsonMatch[0];
+  }
+  
+  return text.trim();
+}
 
 /**
  * Wrapper around Gemini chat completions with retry logic.
@@ -17,23 +36,32 @@ export async function chatCompletion(params: {
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
-      // Combine system prompt and user prompt for Gemini
-      const prompt = `${params.systemPrompt}\n\n${params.userPrompt}`;
-      
-      const result = await geminiModel.generateContent({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
+      // Get a fresh model instance for each call
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash",
         generationConfig: {
           maxOutputTokens: params.maxTokens,
           temperature: params.temperature,
-          ...(params.jsonMode ? { responseMimeType: "application/json" } : {}),
         },
       });
 
+      // Combine system prompt and user prompt for Gemini
+      const prompt = `${params.systemPrompt}\n\n${params.userPrompt}`;
+      
+      const result = await model.generateContent(prompt);
       const response = result.response;
       const content = response.text();
       
       if (!content) {
         throw new Error("Gemini returned empty response");
+      }
+
+      // If JSON mode is requested, extract and validate JSON
+      if (params.jsonMode) {
+        const jsonContent = extractJson(content);
+        // Validate it's parseable JSON
+        JSON.parse(jsonContent);
+        return jsonContent;
       }
 
       return content;
@@ -44,8 +72,8 @@ export async function chatCompletion(params: {
       );
 
       if (attempt < MAX_RETRIES) {
-        // Wait 1 second before retry
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Wait before retry with exponential backoff
+        await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)));
       }
     }
   }

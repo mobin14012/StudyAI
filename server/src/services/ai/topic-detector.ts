@@ -12,7 +12,9 @@ Rules:
 4. Topics should be specific enough to generate study questions from.
 5. Order topics from most prominent to least prominent in the text.
 6. Do not include meta-topics like "Introduction" or "Conclusion".
-7. Do not include generic topics like "Study Guide" or "Chapter Summary".`;
+7. Do not include generic topics like "Study Guide" or "Chapter Summary".
+
+IMPORTANT: Return ONLY valid JSON, no markdown, no explanation.`;
 
 const topicResponseSchema = z.object({
   topics: z.array(z.string().min(1).max(100)).min(1).max(20),
@@ -33,7 +35,7 @@ MATERIAL:
 ${truncated}
 ---
 
-Return ONLY a JSON object in this exact format:
+Return ONLY a JSON object in this exact format (no markdown, no code blocks):
 {"topics": ["Topic 1", "Topic 2", ...]}`;
 
   try {
@@ -45,13 +47,21 @@ Return ONLY a JSON object in this exact format:
       jsonMode: true,
     });
 
+    logger.info("Topic detection raw response received", { responseLength: raw.length });
+
     const parsed = JSON.parse(raw);
     const validated = topicResponseSchema.parse(parsed);
+    
+    logger.info("Topics detected successfully", { count: validated.topics.length });
     return validated.topics;
   } catch (error: any) {
-    logger.error("Topic detection failed:", error);
+    logger.error("Topic detection failed:", { 
+      message: error.message, 
+      name: error.name,
+      stack: error.stack 
+    });
 
-    // If it's already an AppError (from OpenAI client), re-throw
+    // If it's already an AppError, re-throw
     if (error instanceof AppError) {
       throw error;
     }
@@ -65,11 +75,19 @@ Return ONLY a JSON object in this exact format:
       );
     }
 
-    if (error.message?.includes("API key") || error.message?.includes("INVALID_ARGUMENT")) {
+    if (error.message?.includes("API_KEY_INVALID") || error.message?.includes("API key not valid")) {
       throw new AppError(
         "AI service configuration error. Please contact support.",
         503,
         "AI_CONFIG_ERROR"
+      );
+    }
+
+    if (error.message?.includes("SAFETY")) {
+      throw new AppError(
+        "Content was blocked by safety filters. Please try different material.",
+        400,
+        "CONTENT_BLOCKED"
       );
     }
 
