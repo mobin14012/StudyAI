@@ -7,6 +7,7 @@ import {
   updateTopicsApi,
   generateSummaryApi,
   deleteMaterialApi,
+  retryTopicDetectionApi,
 } from "@/api/materials";
 import type { Topic } from "@/types";
 
@@ -78,6 +79,17 @@ export function useDeleteMaterial() {
   return useMutation({
     mutationFn: deleteMaterialApi,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["materials"] });
+    },
+  });
+}
+
+export function useRetryTopicDetection() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: retryTopicDetectionApi,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["materials", data.id] });
       queryClient.invalidateQueries({ queryKey: ["materials"] });
     },
   });

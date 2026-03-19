@@ -68,3 +68,10 @@ export async function generateSummaryApi(
 export async function deleteMaterialApi(id: string): Promise<void> {
   await api.delete(`/materials/${id}`);
 }
+
+export async function retryTopicDetectionApi(id: string): Promise<MaterialDetail> {
+  const response = await api.post(`/materials/${id}/retry-topics`, {}, {
+    timeout: 60000, // 60s timeout for AI processing
+  });
+  return response.data.data;
+}

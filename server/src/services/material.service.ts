@@ -58,7 +58,7 @@ export async function processUpload(
   });
   await material.save();
 
-  // Step 3: Detect topics via AI
+  // Step 3: Detect topics via AI (with fallback)
   try {
     const topicNames = await detectTopics(extractedText);
     material.topics = topicNames.map((name) => ({
@@ -69,13 +69,15 @@ export async function processUpload(
     await material.save();
   } catch (error: any) {
     logger.error(`Topic detection failed for material ${material._id}:`, error);
-    material.status = "error";
-    material.errorMessage =
-      error instanceof AppError
-        ? error.message
-        : "Topic detection failed. Please try again.";
+    
+    // Fallback: Save material as ready with no topics
+    // User can still view the material and manually work with it
+    material.topics = [];
+    material.status = "ready";
+    material.errorMessage = "Topic detection failed. You can still use this material.";
     await material.save();
-    throw error;
+    
+    logger.info(`Material ${material._id} saved with fallback (no topics)`);
   }
 
   return {
@@ -292,4 +294,49 @@ export async function deleteMaterial(
       `Deleted ${questionResult.deletedCount} questions for material ${materialId}`
     );
   }
+}
+
+/**
+ * Retry topic detection for a material that failed or has no topics.
+ */
+export async function retryTopicDetection(
+  materialId: string,
+  userId: string
+) {
+  const material = await Material.findOne({
+    _id: materialId,
+    userId,
+  });
+
+  if (!material) {
+    throw new AppError("Material not found", 404, "MATERIAL_NOT_FOUND");
+  }
+
+  // Detect topics via AI
+  const topicNames = await detectTopics(material.extractedText);
+  material.topics = topicNames.map((name) => ({
+    name,
+    selected: true,
+  }));
+  material.status = "ready";
+  material.errorMessage = undefined;
+  await material.save();
+
+  return {
+    id: material._id.toString(),
+    filename: material.filename,
+    fileType: material.fileType,
+    fileSize: material.fileSize,
+    extractedText: material.extractedText,
+    textPreview: material.extractedText.slice(0, 500),
+    textLength: material.textLength,
+    topics: material.topics.map((t) => ({
+      name: t.name,
+      selected: t.selected,
+    })),
+    status: material.status,
+    summary: material.summary,
+    summaryGeneratedAt: material.summaryGeneratedAt,
+    createdAt: material.createdAt,
+  };
 }

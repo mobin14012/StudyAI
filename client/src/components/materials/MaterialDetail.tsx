@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, File, Calendar, Hash } from "lucide-react";
+import { FileText, File, Calendar, Hash, RefreshCw, AlertCircle } from "lucide-react";
+import { useRetryTopicDetection } from "@/hooks/use-materials";
+import { toast } from "sonner";
 import type { MaterialDetail as MaterialDetailType } from "@/types";
 
 interface MaterialDetailProps {
@@ -16,6 +20,23 @@ function formatFileSize(bytes: number): string {
 
 export function MaterialDetail({ material }: MaterialDetailProps) {
   const FileIcon = material.fileType === "pdf" ? File : FileText;
+  const retryTopics = useRetryTopicDetection();
+  const [isRetrying, setIsRetrying] = useState(false);
+
+  async function handleRetryTopics() {
+    setIsRetrying(true);
+    try {
+      await retryTopics.mutateAsync(material.id);
+      toast.success("Topics detected successfully!");
+    } catch (error: any) {
+      toast.error(error.response?.data?.error?.message || "Failed to detect topics. Please try again.");
+    } finally {
+      setIsRetrying(false);
+    }
+  }
+
+  const hasNoTopics = material.topics.length === 0;
+  const hasErrorMessage = material.errorMessage;
 
   return (
     <div className="space-y-6">
@@ -40,6 +61,37 @@ export function MaterialDetail({ material }: MaterialDetailProps) {
           </div>
         </div>
       </div>
+
+      {/* Warning if no topics */}
+      {hasNoTopics && (
+        <Card className="border-yellow-500/50 bg-yellow-500/10">
+          <CardContent className="pt-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium text-yellow-700 dark:text-yellow-400">
+                    No topics detected
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {hasErrorMessage || "Topic detection failed. You can retry or use this material without topics."}
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 min-h-10 shrink-0"
+                onClick={handleRetryTopics}
+                disabled={isRetrying}
+              >
+                <RefreshCw className={`h-4 w-4 ${isRetrying ? "animate-spin" : ""}`} />
+                {isRetrying ? "Detecting..." : "Retry Detection"}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Topics */}
       {material.topics.length > 0 && (

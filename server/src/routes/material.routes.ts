@@ -15,6 +15,7 @@ import {
   updateTopicSelections,
   getOrGenerateSummary,
   deleteMaterial,
+  retryTopicDetection,
 } from "../services/material.service";
 import { AuthRequest } from "../types/index";
 
@@ -114,6 +115,24 @@ router.post(
     try {
       const { id } = materialIdParamSchema.parse(req.params);
       const result = await getOrGenerateSummary(id, req.userId!);
+      res.json({
+        success: true,
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST /api/materials/:id/retry-topics — Retry topic detection
+router.post(
+  "/:id/retry-topics",
+  aiLimiter,
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+      const { id } = materialIdParamSchema.parse(req.params);
+      const result = await retryTopicDetection(id, req.userId!);
       res.json({
         success: true,
         data: result,
