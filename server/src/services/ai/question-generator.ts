@@ -1,4 +1,4 @@
-import { chatCompletion, truncateForTokenBudget } from "./openai-client";
+import { chatCompletion, truncateForTokenBudget } from "./gemini-client";
 import {
   validateGeneratedQuestions,
   parseAiResponse,

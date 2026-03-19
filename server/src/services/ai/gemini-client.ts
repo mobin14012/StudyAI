@@ -1,10 +1,10 @@
-import { openai } from "../../config/openai";
+import { geminiModel } from "../../config/gemini";
 import { logger } from "../../config/logger";
 
 const MAX_RETRIES = 1;
 
 /**
- * Wrapper around OpenAI chat completions with retry logic.
+ * Wrapper around Gemini chat completions with retry logic.
  */
 export async function chatCompletion(params: {
   systemPrompt: string;
@@ -17,29 +17,30 @@ export async function chatCompletion(params: {
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
-      const response = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: params.systemPrompt },
-          { role: "user", content: params.userPrompt },
-        ],
-        max_tokens: params.maxTokens,
-        temperature: params.temperature,
-        ...(params.jsonMode
-          ? { response_format: { type: "json_object" as const } }
-          : {}),
+      // Combine system prompt and user prompt for Gemini
+      const prompt = `${params.systemPrompt}\n\n${params.userPrompt}`;
+      
+      const result = await geminiModel.generateContent({
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: {
+          maxOutputTokens: params.maxTokens,
+          temperature: params.temperature,
+          ...(params.jsonMode ? { responseMimeType: "application/json" } : {}),
+        },
       });
 
-      const content = response.choices[0]?.message?.content;
+      const response = result.response;
+      const content = response.text();
+      
       if (!content) {
-        throw new Error("OpenAI returned empty response");
+        throw new Error("Gemini returned empty response");
       }
 
       return content;
     } catch (error: any) {
       lastError = error;
       logger.warn(
-        `OpenAI API call failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}): ${error.message}`
+        `Gemini API call failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}): ${error.message}`
       );
 
       if (attempt < MAX_RETRIES) {

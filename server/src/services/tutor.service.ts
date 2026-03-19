@@ -1,11 +1,8 @@
-import OpenAI from "openai";
-import { env } from "../config/env";
+import { geminiModel } from "../config/gemini";
 import { Material } from "../models/Material";
 import { AppError } from "../middleware/error-handler";
 import { logger } from "../config/logger";
 import type { ChatMessageInput } from "../schemas/tutor.schemas";
-
-const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -67,22 +64,28 @@ INSTRUCTIONS:
 - If the student seems confused, offer to break down concepts further
 - Keep responses concise but thorough`;
 
-  // Build messages array
-  const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
-    { role: "system", content: systemPrompt },
-    ...history.map((h) => ({ role: h.role, content: h.content })),
-    { role: "user", content: message },
-  ];
+  // Build conversation history for Gemini
+  const conversationHistory = history
+    .map((h) => `${h.role === "user" ? "Student" : "Tutor"}: ${h.content}`)
+    .join("\n\n");
+
+  const fullPrompt = `${systemPrompt}
+
+${conversationHistory ? `CONVERSATION SO FAR:\n${conversationHistory}\n\n` : ""}Student: ${message}
+
+Tutor:`;
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages,
-      max_tokens: 1000,
-      temperature: 0.7,
+    const result = await geminiModel.generateContent({
+      contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
+      generationConfig: {
+        maxOutputTokens: 1000,
+        temperature: 0.7,
+      },
     });
 
-    const assistantMessage = completion.choices[0]?.message?.content || "I'm sorry, I couldn't generate a response.";
+    const response = result.response;
+    const assistantMessage = response.text() || "I'm sorry, I couldn't generate a response.";
 
     logger.info(`Tutor chat completed for material ${materialId}`);
 

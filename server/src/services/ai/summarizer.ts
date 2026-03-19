@@ -2,7 +2,7 @@ import {
   chatCompletion,
   estimateTokens,
   truncateForTokenBudget,
-} from "./openai-client";
+} from "./gemini-client";
 import { AppError } from "../../middleware/error-handler";
 import { logger } from "../../config/logger";
 
@@ -31,7 +31,7 @@ const CHUNK_SIZE_TOKENS = 30000;
 const CHUNK_OVERLAP_TOKENS = 500;
 
 /**
- * Generate a summary of study material using OpenAI.
+ * Generate a summary of study material using Gemini.
  * Uses single-pass for short documents, map-reduce for long documents.
  */
 export async function generateSummary(text: string): Promise<string> {

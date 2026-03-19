@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { chatCompletion, truncateForTokenBudget } from "./openai-client";
+import { chatCompletion, truncateForTokenBudget } from "./gemini-client";
 import { AppError } from "../../middleware/error-handler";
 import { logger } from "../../config/logger";
 
@@ -19,7 +19,7 @@ const topicResponseSchema = z.object({
 });
 
 /**
- * Detect educational topics from study material text using OpenAI.
+ * Detect educational topics from study material text using Gemini.
  * Returns an array of topic name strings.
  */
 export async function detectTopics(text: string): Promise<string[]> {
@@ -56,8 +56,8 @@ Return ONLY a JSON object in this exact format:
       throw error;
     }
 
-    // Check for common OpenAI errors
-    if (error.code === "insufficient_quota" || error.message?.includes("quota")) {
+    // Check for common Gemini errors
+    if (error.message?.includes("quota") || error.message?.includes("RESOURCE_EXHAUSTED")) {
       throw new AppError(
         "AI service quota exceeded. Please try again later.",
         503,
@@ -65,7 +65,7 @@ Return ONLY a JSON object in this exact format:
       );
     }
 
-    if (error.code === "invalid_api_key" || error.message?.includes("API key")) {
+    if (error.message?.includes("API key") || error.message?.includes("INVALID_ARGUMENT")) {
       throw new AppError(
         "AI service configuration error. Please contact support.",
         503,

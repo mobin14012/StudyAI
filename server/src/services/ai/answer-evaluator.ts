@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { chatCompletion } from "./openai-client";
+import { chatCompletion } from "./gemini-client";
 import { logger } from "../../config/logger";
 
 const SYSTEM_PROMPT = `You are an educational assessment AI. Evaluate student answers against the correct answer.
