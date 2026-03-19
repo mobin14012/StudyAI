@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import type { StartPracticeRequest } from "@/types";
 
 interface PracticeSetupProps {
@@ -22,7 +23,7 @@ export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
   const [materialId, setMaterialId] = useState("");
   const [questionCount, setQuestionCount] = useState(10);
 
-  const { data: materials, isLoading: materialsLoading } = useMaterials({
+  const { data: materials, isLoading: materialsLoading, error: materialsError } = useMaterials({
     status: "ready",
     page: 1,
     limit: 100,
@@ -38,6 +39,29 @@ export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
 
   const canStart =
     mode === "weak_topic" || (mode === "general" && materialId);
+
+  // Show loading state while materials are loading
+  if (materialsLoading) {
+    return (
+      <Card className="max-w-md mx-auto">
+        <CardContent className="py-12 flex justify-center">
+          <LoadingSpinner size="lg" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Show error state if materials failed to load
+  if (materialsError) {
+    return (
+      <Card className="max-w-md mx-auto">
+        <CardContent className="py-12 text-center">
+          <p className="text-destructive mb-4">Failed to load materials</p>
+          <Button onClick={() => window.location.reload()}>Retry</Button>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="max-w-md mx-auto">
@@ -81,7 +105,7 @@ export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
                 <SelectValue placeholder="Select a material..." />
               </SelectTrigger>
               <SelectContent>
-                {materials?.data.map((material) => (
+                {materials?.data?.map((material) => (
                   <SelectItem key={material.id} value={material.id}>
                     <span className="truncate">{material.filename}</span>
                   </SelectItem>
