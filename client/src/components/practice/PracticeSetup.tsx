@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
+import { AlertCircle, RefreshCw } from "lucide-react";
 import type { StartPracticeRequest } from "@/types";
 
 interface PracticeSetupProps {
@@ -23,7 +24,13 @@ export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
   const [materialId, setMaterialId] = useState("");
   const [questionCount, setQuestionCount] = useState(10);
 
-  const { data: materials, isLoading: materialsLoading, error: materialsError } = useMaterials({
+  const { 
+    data: materials, 
+    isLoading: materialsLoading, 
+    error: materialsError,
+    refetch,
+    isRefetching
+  } = useMaterials({
     status: "ready",
     page: 1,
     limit: 100,
@@ -35,6 +42,10 @@ export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
       materialId: mode === "general" ? materialId : undefined,
       questionCount,
     });
+  };
+
+  const handleRetry = () => {
+    refetch();
   };
 
   const canStart =
@@ -53,11 +64,27 @@ export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
 
   // Show error state if materials failed to load
   if (materialsError) {
+    const errorMessage = (materialsError as any)?.response?.data?.error?.message 
+      || (materialsError as Error)?.message 
+      || "Failed to load materials";
+    
     return (
       <Card className="max-w-md mx-auto">
-        <CardContent className="py-12 text-center">
-          <p className="text-destructive mb-4">Failed to load materials</p>
-          <Button onClick={() => window.location.reload()}>Retry</Button>
+        <CardContent className="py-12 text-center space-y-4">
+          <AlertCircle className="h-12 w-12 text-destructive mx-auto" />
+          <div>
+            <p className="text-destructive font-medium">Failed to load materials</p>
+            <p className="text-sm text-muted-foreground mt-1">{errorMessage}</p>
+          </div>
+          <Button 
+            onClick={handleRetry} 
+            variant="outline"
+            disabled={isRefetching}
+            className="gap-2"
+          >
+            <RefreshCw className={`h-4 w-4 ${isRefetching ? "animate-spin" : ""}`} />
+            {isRefetching ? "Retrying..." : "Retry"}
+          </Button>
         </CardContent>
       </Card>
     );
@@ -112,6 +139,11 @@ export function PracticeSetup({ onStart, isLoading }: PracticeSetupProps) {
                 ))}
               </SelectContent>
             </Select>
+            {materials?.data?.length === 0 && (
+              <p className="text-sm text-muted-foreground">
+                No materials with topics available. Upload a document first.
+              </p>
+            )}
           </div>
         )}
 

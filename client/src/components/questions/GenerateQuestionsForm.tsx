@@ -15,7 +15,7 @@ import { DifficultySelector } from "./DifficultySelector";
 import { useMaterials, useMaterial } from "@/hooks/use-materials";
 import { useAuthStore } from "@/stores/auth-store";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
-import { Sparkles, AlertCircle } from "lucide-react";
+import { Sparkles, AlertCircle, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { QuestionType, DifficultyLevel, GenerateQuestionsRequest } from "@/types";
 
@@ -29,7 +29,13 @@ export function GenerateQuestionsForm({
   isLoading,
 }: GenerateQuestionsFormProps) {
   const { user } = useAuthStore();
-  const { data: materialsData, isLoading: materialsLoading, error: materialsError } = useMaterials({ status: "ready" });
+  const { 
+    data: materialsData, 
+    isLoading: materialsLoading, 
+    error: materialsError,
+    refetch,
+    isRefetching
+  } = useMaterials({ status: "ready" });
 
   const [materialId, setMaterialId] = useState<string>("");
   const [selectedTopic, setSelectedTopic] = useState<string>("");
@@ -66,6 +72,10 @@ export function GenerateQuestionsForm({
     });
   };
 
+  const handleRetry = () => {
+    refetch();
+  };
+
   const isValid = materialId && selectedTopic && types.length > 0;
 
   // Loading state
@@ -79,12 +89,26 @@ export function GenerateQuestionsForm({
 
   // Error state
   if (materialsError) {
+    const errorMessage = (materialsError as any)?.response?.data?.error?.message 
+      || (materialsError as Error)?.message 
+      || "Failed to load materials";
+
     return (
-      <div className="text-center py-8 space-y-2">
-        <AlertCircle className="h-8 w-8 text-destructive mx-auto" />
-        <p className="text-sm text-destructive">Failed to load materials</p>
-        <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
-          Retry
+      <div className="text-center py-8 space-y-4">
+        <AlertCircle className="h-10 w-10 text-destructive mx-auto" />
+        <div>
+          <p className="text-destructive font-medium">Failed to load materials</p>
+          <p className="text-sm text-muted-foreground mt-1">{errorMessage}</p>
+        </div>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={handleRetry}
+          disabled={isRefetching}
+          className="gap-2"
+        >
+          <RefreshCw className={`h-4 w-4 ${isRefetching ? "animate-spin" : ""}`} />
+          {isRefetching ? "Retrying..." : "Retry"}
         </Button>
       </div>
     );
