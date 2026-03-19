@@ -4,7 +4,6 @@ import {
   usePracticeStore,
   selectCurrentQuestion,
   selectIsComplete,
-  selectScore,
 } from "@/stores/practice-store";
 import { useStartPractice, useSubmitAnswer } from "@/hooks/use-practice";
 import { PracticeSetup } from "@/components/practice/PracticeSetup";
@@ -14,34 +13,40 @@ import { SessionResults } from "@/components/practice/SessionResults";
 import type { StartPracticeRequest, AttemptResult } from "@/types";
 
 export function PracticePage() {
-  const {
-    sessionId,
-    questions,
-    currentIndex,
-    showFeedback,
-    lastResult,
-    isSubmitting,
-    startSession,
-    submitAttempt,
-    setSubmitting,
-    showFeedbackFor,
-    nextQuestion,
-    reset,
-  } = usePracticeStore();
+  const sessionId = usePracticeStore((s) => s.sessionId);
+  const questions = usePracticeStore((s) => s.questions);
+  const currentIndex = usePracticeStore((s) => s.currentIndex);
+  const showFeedback = usePracticeStore((s) => s.showFeedback);
+  const lastResult = usePracticeStore((s) => s.lastResult);
+  const isSubmitting = usePracticeStore((s) => s.isSubmitting);
+  const attempts = usePracticeStore((s) => s.attempts);
+  
+  const startSession = usePracticeStore((s) => s.startSession);
+  const submitAttempt = usePracticeStore((s) => s.submitAttempt);
+  const setSubmitting = usePracticeStore((s) => s.setSubmitting);
+  const showFeedbackFor = usePracticeStore((s) => s.showFeedbackFor);
+  const nextQuestion = usePracticeStore((s) => s.nextQuestion);
+  const reset = usePracticeStore((s) => s.reset);
 
   const currentQuestion = usePracticeStore(selectCurrentQuestion);
   const isComplete = usePracticeStore(selectIsComplete);
-  const score = usePracticeStore(selectScore);
+  
+  // Calculate score inline to avoid selector creating new object
+  const score = {
+    correct: attempts.filter((a) => a.isCorrect).length,
+    total: attempts.length,
+    percentage: attempts.length > 0 ? Math.round((attempts.filter((a) => a.isCorrect).length / attempts.length) * 100) : 0,
+  };
 
   const startPracticeMutation = useStartPractice();
   const submitAnswerMutation = useSubmitAnswer();
 
-  // Cleanup on unmount
+  // Cleanup on unmount - use empty deps to avoid re-running
   useEffect(() => {
     return () => {
-      reset();
+      usePracticeStore.getState().reset();
     };
-  }, [reset]);
+  }, []);
 
   const handleStart = async (request: StartPracticeRequest) => {
     try {

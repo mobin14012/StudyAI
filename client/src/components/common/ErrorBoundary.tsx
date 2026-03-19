@@ -26,9 +26,18 @@ export class ErrorBoundary extends Component<Props, State> {
     console.error("ErrorBoundary caught an error:", error, errorInfo);
   }
 
-  handleReset = () => {
+  handleGoBack = () => {
     this.setState({ hasError: false, error: null });
-    window.location.href = "/";
+    // Use history back instead of full reload to preserve auth state
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.reload();
+    }
+  };
+
+  handleReload = () => {
+    window.location.reload();
   };
 
   render() {
@@ -44,7 +53,10 @@ export class ErrorBoundary extends Component<Props, State> {
             <p className="text-muted-foreground max-w-md">
               {this.state.error?.message || "An unexpected error occurred"}
             </p>
-            <Button onClick={this.handleReset}>Go to Home</Button>
+            <div className="flex gap-3 justify-center">
+              <Button variant="outline" onClick={this.handleGoBack}>Go Back</Button>
+              <Button onClick={this.handleReload}>Reload Page</Button>
+            </div>
           </div>
         </div>
       );
